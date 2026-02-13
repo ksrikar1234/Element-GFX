@@ -25,6 +25,42 @@
 #include <filesystem>
 #include <QSurfaceFormat>
 
+#include <Python.h>
+#include <QCoreApplication>
+#include <QDir>
+#include <iostream>
+
+void initialize_gridpro_python() {
+    // 1. Get the absolute path to your runtime
+    QString bundlePath = QCoreApplication::applicationDirPath();
+    QString pyHome = bundlePath + "/runtime";
+    
+    // 2. Convert to Wide String for the C-API
+    std::wstring wHome = pyHome.toStdWString();
+    
+    // 3. CRITICAL: Clear any environment variables that might be poisoning the path
+    unsetenv("PYTHONPATH");
+    unsetenv("PYTHONHOME");
+
+    // 4. Set the Home explicitly
+    Py_SetPythonHome(wHome.c_str());
+
+    // 5. Hard-set the path to include only your bundle folders
+    // This bypasses the logic that was looking in /Users/.../GridPro
+    std::wstring wPath = wHome + L"/lib/python3.11:" + 
+                         wHome + L"/lib/python3.11/lib-dynload:" +
+                         wHome + L"/lib/python3.11/site-packages";
+    Py_SetPath(wPath.c_str());
+
+    // 6. Initialize (or use your pybind11 guard after this)
+    Py_Initialize();
+    
+    if (!Py_IsInitialized()) {
+        std::cerr << "Failed to initialize embedded Python!" << std::endl;
+    }
+}
+
+
 namespace py = pybind11;
 namespace fs = std::filesystem;
 
@@ -188,21 +224,23 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // --- 1. SETUP PYTHON ENVIRONMENT ---
-    // (Ensure you keep your existing setenv logic here)
-    fs::path baseDir = fs::absolute(fs::path(argv[0])).parent_path();
-    std::string pythonHome = (baseDir / "runtime").string();
-    setenv("PYTHONHOME", pythonHome.c_str(), 1);
-    setenv("PYTHONPATH", (pythonHome + "/lib/python3.11/site-packages").c_str(), 1);
+    QApplication app(argc, argv);
+
+    // 2. Get the internal path
+    // This points to: ws_qt.app/Contents/MacOS/runtime
+    QString binDir = QApplication::applicationDirPath();
+    QString pyHome = binDir + "/runtime";
+
+    // 3. YOUR ORIGINAL APPROACH: setenv
+    // We MUST clear the 'GridPro/lib' path from your logs to prevent SIGABRT
+    unsetenv("PYTHONPATH"); 
+    
+    // Set the HOME. Python 3.11 will read this during Py_Initialize.
+    setenv("PYTHONHOME", pyHome.toUtf8().constData(), 1);
 
     // Start the interpreter here (stays alive for the whole app duration)
     py::scoped_interpreter guard{};
 
-    // // Force the app to use the 'software' composition path for OpenGL widgets
-    //     // This often bypasses the Intel/Mesa alpha-blending bug
-    //     qputenv("QT_OPENGL_NO_SANITY_CHECK", "1");
-
-    QApplication app(argc, argv);
     QMainWindow window;
 
     window.setWindowTitle("GridPro Scripting Viewer");
