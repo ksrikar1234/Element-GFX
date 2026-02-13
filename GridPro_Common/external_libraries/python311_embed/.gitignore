@@ -1,4 +1,3 @@
-cpython
 *.o
 *.pyc
 .DS_Store
