@@ -1,4 +1,4 @@
-
+include(external_libraries/python311_embed/python_embed.pri)
 
 SOURCES += \
     $$PWD/src/communication/gp_packet.cpp \

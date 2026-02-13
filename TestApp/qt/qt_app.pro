@@ -12,7 +12,6 @@ DESTDIR = $$PWD
 
 include(../../GridPro_Common/communication_lib.pri)
 include(../../graphics_sources.pri)
-include(../../PythonBinding/pybind11cpp.pri)
 
 
 
