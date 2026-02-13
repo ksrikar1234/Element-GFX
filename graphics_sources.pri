@@ -43,7 +43,6 @@ SOURCES += \
 contains(viewer_variable, qt) {
     !build_pass:message("Building Qt OpenGLWiget")
     SOURCES +=  $$PWD/Renderer/src/Viewers/viewer.cpp 
-    SOURCES +=  $$PWD/Renderer/src/Viewers/osg_viewer.cpp 
 }
 
 # Core
