@@ -5,7 +5,6 @@ QT += core gui widgets openglwidgets
 CONFIG += desktop
 CONFIG += console
 CONFIG += debug_and_release
-CONFIG += no_keywords
 SOURCES += qt_app.cpp
 
 DESTDIR = $$PWD
