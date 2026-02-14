@@ -250,7 +250,7 @@ inline void PythonConsole::runScript()
         auto globals = py::globals();
         auto locals = py::dict();
         locals["viewer"] = py::cast(viewer, py::return_value_policy::reference);
-        globals["gfx"] = gfx;
+        // globals["gfx"] = gfx;
 
         // 2. Setup Redirection BEFORE Execution
         py::module_ sys = py::module_::import("sys");
@@ -293,19 +293,24 @@ inline void PythonConsole::runScript()
 
 void initialize_gridpro_python()
 {
-    // 2. Get the internal path
-    // This points to: ws_qt.app/Contents/MacOS/runtime
     QString binDir = QApplication::applicationDirPath();
-    std::wstring pyHome = binDir.toStdWString() + L"/runtime";
+    QString pyHomeStr = binDir + "/runtime";
+    
+    // We must use static variables or ensure these pointers stay valid 
+    // until Py_Initialize is called.
+    static std::wstring pyHome = pyHomeStr.toStdWString();
+    static std::wstring pyExec = (pyHomeStr + "/bin/python3").toStdWString();
 
-    // 3. YOUR ORIGINAL APPROACH: setenv
-    // We MUST clear the 'GridPro/lib' path from your logs to prevent SIGABRT
+    // 1. Critical: Clear the environment
     unsetenv("PYTHONPATH");
+    unsetenv("PYTHONHOME");
 
-    std::wstring wPath = pyHome + L"/lib/python3.11:" +
-                         pyHome + L"/lib/python3.11/lib-dynload:" +
-                         pyHome + L"/lib/python3.11/site-packages";
-    Py_SetPath(wPath.c_str());
+    // 2. These MUST be called before py::scoped_interpreter guard{}
+    Py_SetPythonHome(pyHome.c_str());
+    Py_SetProgramName(pyExec.c_str());
+    
+    // 3. Optional but helpful for debugging
+    std::wcout << L"Setting Home to: " << pyHome << std::endl;
 }
 
 #include "qt_app.moc"  

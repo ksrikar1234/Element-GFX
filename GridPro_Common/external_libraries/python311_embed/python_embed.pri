@@ -12,8 +12,16 @@ macx {
     message("Configuring Python 3.11 for macOS (Universal Static)")
 
     INCLUDEPATH += $$PWD/mac/compile_time/include
+    QMAKE_LFLAGS += -rdynamic
 
-    # We link specifically to the .a file to ensure a self-contained binary
+    QMAKE_LFLAGS += -Wl,-export_dynamic
+    QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+
+    PRE_TARGETDEPS += $$PWD/mac/compile_time/libs/libpython3.11.a
+    QMAKE_LFLAGS += -Wl,-force_load, $$PWD/mac/compile_time/libs/libpython3.11.a
+
+    QMAKE_LFLAGS += -Wl, -all_load
+
     LIBS += $$PWD/mac/compile_time/libs/libpython3.11.a
 
     # System dependencies for static Python on Mac

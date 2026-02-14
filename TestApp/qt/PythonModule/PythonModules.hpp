@@ -66,3 +66,48 @@ PYBIND11_EMBEDDED_MODULE(GridPro_GFX, m)
     m.attr("GL_QUADS")          = (int)GL_QUADS;
     m.attr("GL_QUAD_STRIP")     = (int)GL_QUAD_STRIP;  
 }
+
+
+PYBIND11_EMBEDDED_MODULE(GridPro_Python, m) {
+    m.doc() = "GridPro Embedded Python Utilities";
+
+   m.def("install", [](const std::string& package, py::kwargs kwargs) {
+    try {
+        auto subprocess = py::module_::import("subprocess");
+        auto sys = py::module_::import("sys");
+        
+        // 1. Get the path to the internal python binary
+        // sys.executable usually points to your ws_qt app. 
+        // We need the one in runtime/bin/python3
+        std::string python_exe = py::cast<std::string>(sys.attr("prefix")) + "/bin/python3";
+        
+        // 2. Build the command
+        py::list cmd;
+        cmd.append(python_exe);
+        cmd.append("-m");
+        cmd.append("pip");
+        cmd.append("install");
+        cmd.append(package);
+
+        // Optional: If you want to force it to use the bundled site-packages
+        // even if the user has a global PYTHONPATH set
+        if (!kwargs.contains("target")) {
+            std::string target_dir = py::cast<std::string>(sys.attr("prefix")) + "/lib/python3.11/site-packages";
+            cmd.append("--target");
+            cmd.append(target_dir);
+        } else {
+            cmd.append("--target");
+            cmd.append(kwargs["target"]);
+        }
+
+        // 3. Execute
+        // Using check_call ensures an exception is thrown if the install fails
+        subprocess.attr("check_call")(cmd);
+        return true;
+        
+    } catch (const py::error_already_set& e) {
+        std::cerr << "Pip Error: " << e.what() << std::endl;
+        return false;
+    }
+}, "Install a package into the runtime environment", py::arg("package"));
+}

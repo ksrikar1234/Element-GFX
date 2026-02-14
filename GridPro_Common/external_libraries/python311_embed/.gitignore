@@ -1,3 +1,6 @@
 *.o
 *.pyc
 .DS_Store
+**/__pycache__/
+**/site-packages/numpy/
+**/site-packages/numpy-*.dist-info/
