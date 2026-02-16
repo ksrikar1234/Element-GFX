@@ -16,13 +16,12 @@ macx {
 
     QMAKE_LFLAGS += -Wl,-export_dynamic
     QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+    QMAKE_LFLAGS += -Wl, -all_load
 
     PRE_TARGETDEPS += $$PWD/mac/compile_time/libs/libpython3.11.a
     QMAKE_LFLAGS += -Wl,-force_load, $$PWD/mac/compile_time/libs/libpython3.11.a
 
-    QMAKE_LFLAGS += -Wl, -all_load
-
-    LIBS += $$PWD/mac/compile_time/libs/libpython3.11.a
+    # LIBS += $$PWD/mac/compile_time/libs/libpython3.11.a
 
     # System dependencies for static Python on Mac
     LIBS += -ldl -lpthread -lz -lm
