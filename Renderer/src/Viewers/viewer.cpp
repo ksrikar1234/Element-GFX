@@ -96,8 +96,8 @@ void Viewer::initializeGL()
 
     QSurfaceFormat fmt = this->format();
     qDebug() << "--- OpenGL Surface Diagnostic ---";
-    qDebug() << "Vendor:  " << (const char*)glGetString(GL_VENDOR);
-    qDebug() << "Renderer:" << (const char*)glGetString(GL_RENDERER);
+    qDebug() << "Vendor:  " << (const char*)M_GL_API->glGetString(GL_VENDOR);
+    qDebug() << "Renderer:" << (const char*)M_GL_API->glGetString(GL_RENDERER);
     qDebug() << "RGBA Bits [" << fmt.redBufferSize() << "," 
              << fmt.greenBufferSize() << "," 
              << fmt.blueBufferSize() << "," 
