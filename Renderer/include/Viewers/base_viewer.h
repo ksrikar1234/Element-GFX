@@ -299,6 +299,7 @@ protected:
     void create_and_display_node_manipulator(const float& x, const float& y, const float& z);
     void create_and_display_mouse_ray();
     void create_and_display_workplane();
+    void create_and_display_gizmo();
 
     void set_light_position(const float &in_x, const float &in_y, const float &in_z);
 

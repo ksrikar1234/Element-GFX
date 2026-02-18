@@ -24,6 +24,7 @@
 #include <fstream>
 
 #include "Primitives_3D/gp_sphere.hpp"
+#include "gp_gizmo.hpp"
 
 
 using namespace GridPro_GFX;
@@ -124,6 +125,7 @@ void AbstractViewerWindow::render_update()
     create_and_display_light();
     create_and_display_workplane();
     create_and_display_mouse_ray();
+    create_and_display_gizmo();
     
     upload_commits();
 
@@ -1558,6 +1560,18 @@ void AbstractViewerWindow::create_and_display_workplane()
     m_workplane_descriptor->set_fill_color(255, 255, 255, 255);
     m_workplane_descriptor->set_line_width(3.0f);
     commit_geometry("viewer_workplane_quad", GL_LAYER_BACKGROUND, m_workplane_descriptor);
+}
+
+void AbstractViewerWindow::create_and_display_gizmo()
+{
+    GizmoHandle m_gizmo;
+    m_gizmo.update_from_bbox(m_camera->get_bounding_box().min, m_camera->get_bounding_box().max);
+    
+    // Commit to the renderer
+    commit_geometry("gizmo_translate", GL_LAYER_BACKGROUND, m_gizmo.get_translate_descriptor());
+    commit_geometry("gizmo_scale",     GL_LAYER_BACKGROUND, m_gizmo.get_scale_descriptor());
+    commit_geometry("gizmo_rotate",    GL_LAYER_BACKGROUND, m_gizmo.get_rotate_descriptor());
+
 }
 
 AbstractViewerWindow::WorkPlane::WorkPlane(double px, double py, double pz, double nx, double ny, double nz)

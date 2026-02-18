@@ -29,7 +29,7 @@ namespace GridPro_GFX {
         if(primitives.find(name) != primitives.end() && primitives[name] != nullptr)
         {
             primitives[name].reset();
-            GP_TRACE("Warning ! You are ovewriting an existing Primitive set with ID : ", name , "\n"); 
+            GP_TRACE("Warning ! You are ovewriting an existing Primitive set with ID : ", name); 
         }  
         
         if(Primitivetype == 0x1B00) Primitivetype = GL_POINTS;
@@ -56,13 +56,13 @@ namespace GridPro_GFX {
            }
  
            primitives[name] = std::make_shared<PrimitiveSetInstance>(name, Primitivetype, positions);
-           GP_TRACE("Warning ! You are creating a new Primitive set with ID : ", name , ". Use set_new_primitive_set() instead if you create a new PrimitiveSet \n");
+           GP_TRACE("Warning ! You are creating a new Primitive set with ID : ", name , ". Use set_new_primitive_set() instead if you create a new PrimitiveSet");
         }
         else
         {
             if(primitives[name]->get_primitive_type_enum() != Primitivetype)
                GP_TRACE("Warning ! You are trying to ovewrite an existing Primitive set with const Primitive type ID : ",  name ,
-                          " !!!. Use set_new_primitive_set() instead if you create a new PrimitiveSet\n"); 
+                          " !!!. Use set_new_primitive_set() instead if you create a new PrimitiveSet"); 
         }
         currentPrimitiveSet = primitives[name];    
     }

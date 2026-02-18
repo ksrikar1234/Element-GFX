@@ -675,7 +675,7 @@ namespace GridPro_GFX
 
             unique_colr_reservations[colr_reserv._EntityID_] = colr_reserv;
 
-            GP_TRACE("RESERVED IDS for Entity", EntityIdxKeyMapRegistry[colr_reserv._EntityID_], " = ", colr_reserv._Min_ColorID_, ", ", colr_reserv._Max_ColorID_);
+            GP_TRACE("RESERVED IDS for Entity :", EntityIdxKeyMapRegistry[colr_reserv._EntityID_], " = ", colr_reserv._Min_ColorID_, ", ", colr_reserv._Max_ColorID_);
         }
 
         last_color_id = reserved_color_id_end - 1;
