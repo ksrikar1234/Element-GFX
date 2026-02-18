@@ -1004,7 +1004,7 @@ void AbstractViewerWindow::remove_geometry(const std::string &in_name)
     accquire_render_context();
     if (m_scene->has_entity(in_name) == false)
     {
-        GP_TRACE("Entity not found\n");
+        GP_TRACE("Entity not found");
         return;
     }
     else

@@ -17,7 +17,6 @@
 
 namespace GridPro_GFX
 {
-
     struct bounding_box
     {
         glm::vec3 min, max;

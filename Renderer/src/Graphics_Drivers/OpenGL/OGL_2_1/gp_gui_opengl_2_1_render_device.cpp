@@ -90,7 +90,7 @@ void OpenGL_2_1_RenderDevice::update(float layer)
 { 
     RendererAPI<QGL_2_1>()->glUseProgram(0);
     
-    GP_TRACE("Entities count = ",  entities().count() , "\n");
+    GP_TRACE("Entities count = ",  entities().count());
    
     if(layer == GL_LAYER_PICKABLE)
     {
@@ -103,7 +103,7 @@ void OpenGL_2_1_RenderDevice::update(float layer)
             auto& render_kernel = Entity.get<OpenGL_2_1_RenderKernel>();
             bool  render_sucess = render_kernel.render_selection_mode();
             if(render_sucess)
-            GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Select Mode\n");
+            GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Select Mode");
             }
         }
 
@@ -128,7 +128,7 @@ void OpenGL_2_1_RenderDevice::update(float layer)
             auto& render_kernel = Entity.get<OpenGL_2_1_RenderKernel>();
             bool  render_sucess = render_kernel.render_display_mode();
             if(render_sucess)
-            GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Display Mode\n"); 
+            GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Display Mode"); 
             }  
         }
         return;
@@ -152,7 +152,7 @@ void OpenGL_2_1_RenderDevice::update(float layer)
                auto& render_kernel = Entity.get<OpenGL_2_1_RenderKernel>();
                bool  render_sucess = render_kernel.render_display_mode();
                if(render_sucess)
-               GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Display Mode\n");
+               GP_TRACE("Entity : ", Entity.get<tag_component>().tag_name(), " Rendered in Display Mode");
                }
                
                if(entity_layer_id == GL_LAYER_FOREGROUND_2D || entity_layer_id == GL_LAYER_BACKGROUND_2D)

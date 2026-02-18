@@ -79,8 +79,8 @@ namespace OpenGL_2_1
         last_pick_entity_count = curr_entity_count;
         last_pick_vertices_per_primitve_count = vertices_per_primitive;
         
-        GP_TRACE("Init ID : ", last_init_id , "\n");
-        GP_TRACE("Entity Count : ", last_pick_entity_count , "\n");
+        GP_TRACE("Init ID : ", last_init_id);
+        GP_TRACE("Entity Count : ", last_pick_entity_count);
         
         m_unique_color_array.resize(last_pick_entity_count * last_pick_vertices_per_primitve_count * 3);
 

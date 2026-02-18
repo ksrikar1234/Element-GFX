@@ -25,7 +25,7 @@ namespace OpenGL_3_3
 		catch(const std::exception& e)
 		{   
 			// Handle the exception (print an error message, log, etc.)
-			GP_TRACE("Exception in Shader(const char* VertexShaderSource , const char* FragmentShaderSource): ", e.what() , "\n");
+			GP_TRACE("Exception in Shader(const char* VertexShaderSource , const char* FragmentShaderSource): ", e.what());
 			// We might want to rethrow the exception here if we want to propagate it further.
 			throw e;
 		}
@@ -113,7 +113,7 @@ namespace OpenGL_3_3
 		}
 		catch(const std::exception& e) {
 				// Handle the exception (print an error message, log, etc.)
-				GP_TRACE("Exception in GetUniformLocation: ", e.what(), "\n");
+				GP_TRACE("Exception in GetUniformLocation: ", e.what());
 				std::cout << "Exception in GetUniformLocation: " << e.what() << "\n";
 				// We might want to rethrow the exception here if we want to propagate it further.
 				throw e;
@@ -138,7 +138,7 @@ namespace OpenGL_3_3
 		catch(const std::exception& e)
 		{
 				// Handle the exception (print an error message, log, etc.)
-				GP_TRACE( "Exception in GetVertexAttribLocation: ", e.what() , "\n");
+				GP_TRACE( "Exception in GetVertexAttribLocation: ", e.what());
 				// We might want to rethrow the exception here if we want to propagate it further.
 				throw e;
 		}
@@ -209,7 +209,7 @@ namespace OpenGL_3_3
 		catch(const std::exception& e)
 		{   
 			// Handle the exception (print an error message, log, etc.)
-			GP_TRACE("Exception in ~Shader(): ", e.what(), "\n");
+			GP_TRACE("Exception in ~Shader(): ", e.what());
 			// We might want to rethrow the exception here if we want to propagate it further.
 			throw e;
 		}

@@ -59,7 +59,7 @@ namespace OpenGL_3_3
 
         catch(const std::exception& e)
         {
-            GP_TRACE(e.what(), '\n');
+            GP_TRACE(e.what());
         } 
 
         calculate_offsets();
@@ -77,7 +77,7 @@ namespace OpenGL_3_3
 
         catch(const std::exception& e)
         {
-            GP_TRACE(e.what(), '\n');
+            GP_TRACE(e.what());
         } 
 
         create_ibo();
