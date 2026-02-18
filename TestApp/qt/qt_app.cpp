@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     QMainWindow window;
 
     window.setWindowTitle("GridPro Scripting Viewer");
-    window.resize(1200, 800);
+    window.showMaximized();
 
     // --- 2. SETUP VIEWER ---
     auto viewer = new Viewer(&window);
@@ -250,6 +250,9 @@ inline void PythonConsole::runScript()
         auto globals = py::globals();
         auto locals = py::dict();
         locals["viewer"] = py::cast(viewer, py::return_value_policy::reference);
+        // Instead of casting the object directly, cast the address to a long long
+        locals["mainwindow_ptr"] = reinterpret_cast<uintptr_t>(viewer->parent());
+        // locals["mainwindow"] = py::cast(viewer->parent(), py::return_value_policy::reference);
         // globals["gfx"] = gfx;
 
         // 2. Setup Redirection BEFORE Execution
