@@ -81,22 +81,35 @@ namespace OpenGL_2_1
         
         GP_TRACE("Init ID : ", last_init_id);
         GP_TRACE("Entity Count : ", last_pick_entity_count);
+    
+        uint32_t size = curr_entity_count * vertices_per_primitive * 3;
         
-        m_unique_color_array.resize(last_pick_entity_count * last_pick_vertices_per_primitve_count * 3);
+        if(has_index_data())
+        {
+        flattened_vertex_array = (*m_geometry_descriptor)->get_flattened_position_array();
+        size = flattened_vertex_array.size();
+        }
 
-        for(uint32_t i = 0; i < last_pick_entity_count; i++)
+        m_unique_color_array.resize(size);
+
+        GP_TRACE("Color Array Size = ", m_unique_color_array.size());
+
+        GP_TRACE("Vertices per primitive = ", last_pick_vertices_per_primitve_count);
+
+        for(uint32_t i = 0; i < curr_entity_count ; i++)
         {
             uint32_t unique_color_id = i + last_init_id;
             PixelData color = PixelData(unique_color_id);
-            for(uint32_t j = 0; j < last_pick_vertices_per_primitve_count; j++)
+            for(uint32_t j = 0; j < vertices_per_primitive; j++)
             {
-                m_unique_color_array[(i * last_pick_vertices_per_primitve_count + j) * 3 + 0] = color.r ;
-                m_unique_color_array[(i * last_pick_vertices_per_primitve_count + j) * 3 + 1] = color.g ;
-                m_unique_color_array[(i * last_pick_vertices_per_primitve_count + j) * 3 + 2] = color.b ;
+                m_unique_color_array[(i * vertices_per_primitive + j) * 3 + 0] = color.r ;
+                m_unique_color_array[(i * vertices_per_primitive + j) * 3 + 1] = color.g ;
+                m_unique_color_array[(i * vertices_per_primitive + j) * 3 + 2] = color.b ;
             }
         }
-        if(has_index_data())
-        flattened_vertex_array = (*m_geometry_descriptor)->get_flattened_position_array();
+
+        GP_TRACE("Genrated Color Array\n");
+
     }
 
     void VertexArrayObject::bind()
@@ -126,7 +139,7 @@ namespace OpenGL_2_1
          RendererAPI<QGL_2_1>()->glEnableClientState(GL_COLOR_ARRAY);
          RendererAPI<QGL_2_1>()->glShadeModel(GL_SMOOTH);
         } 
-        if(is_in_selection_mode && (*m_geometry_descriptor)->get_pick_scheme_enum() == GL_PICK_BY_PRIMITIVE)
+        if(flattened_vertex_array.size())
         RendererAPI<QGL_2_1>()->glVertexPointer(3, GL_FLOAT, 0, flattened_vertex_array.data());
         else
         RendererAPI<QGL_2_1>()->glVertexPointer(3, GL_FLOAT, 0, PositionData->data());
@@ -137,7 +150,7 @@ namespace OpenGL_2_1
         if(m_unique_color_array.size() > 0 && is_in_selection_mode)
           RendererAPI<QGL_2_1>()->glColorPointer(3, GL_UNSIGNED_BYTE, 0, m_unique_color_array.data());
 
-        else if(ColorData->size() > 0)
+        else if(ColorData->size() > 0 && !is_in_selection_mode)
         {
           RendererAPI<QGL_2_1>()->glColorPointer(3, GL_UNSIGNED_BYTE, 0, ColorData->data()); 
         }
