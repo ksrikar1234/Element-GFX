@@ -19,6 +19,8 @@ namespace GridPro_GFX
     class GeometryDescriptor;
 }
 
+class GizmoHandle;
+
 /// ******************** Why AbstractViewerWindow? ****************************
 
 /// The GridPro GUI is a complex application that requires a stable Viewer Window Interface for Rendering
@@ -523,32 +525,6 @@ protected :
 
     WorkPlane m_workplane;
     
-    // This Class Would Contain a Axes, Circle and Scaler
-    class Gizmo
-    {
-       Gizmo(bool is_translatable = true, bool is_rotatable = true, bool is_scalable = true);
-       void handle_transform_event(double trans_x, double trans_y);
-       std::shared_ptr<GridPro_GFX::GeometryDescriptor> get_updated_gizmo_descriptor();
-
-       private :
-       Point curr_location;
-       float gizmo_size_factor; // The Size of Gizmo Itself
-       std::vector<float>     m_axes_coords;
-       std::vector<uint32_t>  m_axes_indices;
-       std::vector<uint8_t>   m_axes_colors;
-       std::vector<float>     m_circle_coords; // For Rotation 
-       std::array<Point, 2>   m_associated_model_bounding_box;
-       double curr_screen_pos_x, curr_screen_pos_y;
-       
-       // Transforms
-       double trans_x,   trans_y,   trans_z;
-       double rot_x_rad, rot_y_rad, rot_z_rad;
-       double model_size_scale_factor;
-       std::array<double, 16> model_matrix;
-       std::shared_ptr<GridPro_GFX::GeometryDescriptor> m_connected_model_ref; /* Refernce to the Original Model */
-       std::shared_ptr<GridPro_GFX::GeometryDescriptor> m_gizmo_desciptor;
-    };
-
     /// @brief An Interactive Legend Widget used for viewing attributes as a color map and also
     //         use it to interact  
     class Legend
@@ -576,8 +552,14 @@ protected :
 
     //**********End of Widget Classes Declarations **********************/
 
-    std::unordered_map<std::string, Gizmo>  m_gizmos;
     std::unordered_map<std::string, Legend> m_legends;
+    // This Class Would Contain a Axes, Circle and Scaler
+    std::unordered_map<std::string, std::shared_ptr<GizmoHandle>> m_gizmo_handles;
+
+    bool is_dragging_gizmo = false;
+    std::string active_gizmo_entity = "";
+    int active_gizmo_axis_id = -1; // 0:X, 1:Y, 2:Z
+    enum GizmoHandleMode { TRANSLATE, SCALE, ROTATE };
 };
 
 #endif // _GRIDPRO_BASE_VIEWER_

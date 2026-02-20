@@ -715,6 +715,13 @@ namespace GridPro_GFX
             processMousePan(delta.x, delta.y);
         }
 
+        // Inside OrthographicCamera class
+        float get_view_volume_width() const { return m_view_volume.right - m_view_volume.left; }
+        float get_view_volume_height() const { return m_view_volume.top - m_view_volume.bottom; }
+        float get_screen_width() const { return m_screen_dims.x; }
+        float get_screen_height() const { return m_screen_dims.y; }
+        glm::vec3 get_ortho_direction() const { return ortho_direction; }
+
     private:
         void set_updated_view_volume()
         {

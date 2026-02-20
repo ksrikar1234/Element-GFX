@@ -663,6 +663,9 @@ namespace GridPro_GFX
                 GP_ERROR("No RenderKernel and RenderDevice while setting Unique Color Reservation");
                 return;
             } 
+
+
+            if((*MeshComponent)->get_pick_scheme_enum() == GL_PICK_NONE) continue; 
             
             // Based on previous entitiy mac color id,  let the mesh calculate how many ids it needs
             MeshComponent->set_color_id_reserve_start(reserved_color_id_end);

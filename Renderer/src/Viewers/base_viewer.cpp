@@ -88,6 +88,7 @@ void AbstractViewerWindow::initialize_scene()
     create_and_display_axes();
     create_and_display_bounding_box();
     create_and_display_2d_background_quad();
+    create_and_display_gizmo();
 
     m_MouseSensitivity = 0.02f;
     
@@ -125,7 +126,6 @@ void AbstractViewerWindow::render_update()
     create_and_display_light();
     create_and_display_workplane();
     create_and_display_mouse_ray();
-    create_and_display_gizmo();
     
     upload_commits();
 
@@ -1564,13 +1564,14 @@ void AbstractViewerWindow::create_and_display_workplane()
 
 void AbstractViewerWindow::create_and_display_gizmo()
 {
-    GizmoHandle m_gizmo;
-    m_gizmo.update_from_bbox(m_camera->get_bounding_box().min, m_camera->get_bounding_box().max);
+    m_gizmo_handles["default"] = GizmoHandle::create("default");
+    auto m_gizmo = m_gizmo_handles["default"];
+    m_gizmo->update_from_bbox(m_camera->get_bounding_box().min*10.0f, m_camera->get_bounding_box().max*10.0f);
     
     // Commit to the renderer
-    commit_geometry("gizmo_translate", GL_LAYER_BACKGROUND, m_gizmo.get_translate_descriptor());
-    commit_geometry("gizmo_scale",     GL_LAYER_BACKGROUND, m_gizmo.get_scale_descriptor());
-    commit_geometry("gizmo_rotate",    GL_LAYER_BACKGROUND, m_gizmo.get_rotate_descriptor());
+    commit_geometry(m_gizmo->get_translate_name(), GL_LAYER_1, m_gizmo->get_translate_descriptor());
+    commit_geometry(m_gizmo->get_scale_name(), GL_LAYER_1, m_gizmo->get_scale_descriptor());
+    commit_geometry(m_gizmo->get_rotate_name(), GL_LAYER_1, m_gizmo->get_rotate_descriptor());
 
 }
 
@@ -1704,20 +1705,17 @@ void AbstractViewerWindow::WorkSpaceConfig::set_color(std::string object_name, C
 }
 
 
-AbstractViewerWindow::Gizmo::Gizmo(bool is_translatable, bool is_rotatable, bool is_scalable)
-{
+// AbstractViewerWindow::Gizmo::Gizmo(bool is_translatable, bool is_rotatable, bool is_scalable)
+// {
 
-}
+// }
 
-void AbstractViewerWindow::Gizmo::handle_transform_event(double trans_x, double trans_y)
-{
+// void AbstractViewerWindow::Gizmo::handle_transform_event(double trans_x, double trans_y)
+// {
 
-}
+// }
 
-std::shared_ptr<GridPro_GFX::GeometryDescriptor> AbstractViewerWindow::Gizmo::get_updated_gizmo_descriptor()
-{
 
-}
 
 AbstractViewerWindow::Legend::Legend()
 {

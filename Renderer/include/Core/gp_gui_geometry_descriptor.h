@@ -344,7 +344,7 @@ public:
 
 
         /// @brief Get the number of vertices
-        size_t get_num_unique_positions() const { if(primitiveType != POINTS) { return positions->size() / 3; } else { if(indices->size()) return indices->size(); } return 0; }
+        size_t get_num_unique_positions() const { if(primitiveType != POINTS) { return positions->size() / 3; } else { if(indices->size()) return indices->size(); } return positions->size() / 3; }
         size_t get_num_vertices() const         { return indices->size() ? indices->size() : positions->size() / 3; }
         size_t get_num_indices()  const         { return indices->size(); }
         size_t get_num_normals()  const         { return normals->size() / 3; }
