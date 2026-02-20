@@ -139,7 +139,8 @@ namespace OpenGL_2_1
          RendererAPI<QGL_2_1>()->glEnableClientState(GL_COLOR_ARRAY);
          RendererAPI<QGL_2_1>()->glShadeModel(GL_SMOOTH);
         } 
-        if(flattened_vertex_array.size())
+        
+        if(flattened_vertex_array.size() && is_in_selection_mode)
         RendererAPI<QGL_2_1>()->glVertexPointer(3, GL_FLOAT, 0, flattened_vertex_array.data());
         else
         RendererAPI<QGL_2_1>()->glVertexPointer(3, GL_FLOAT, 0, PositionData->data());

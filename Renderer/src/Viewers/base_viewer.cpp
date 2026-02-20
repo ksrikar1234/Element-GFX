@@ -407,6 +407,9 @@ bool AbstractViewerWindow::handle_subentity_highlighting()
         const std::string selected_entity_key = sub.getPickEvent().getEntityKey();
         uint32_t sub_entity_id = sub.getPickEvent().getSubEntityID();
         auto& hovered_descriptor = get_geometry(selected_entity_key);
+        
+        if(!(*hovered_descriptor)->isHighlightable()) return need_redraw;
+
         if((*hovered_descriptor)->get_pick_scheme_enum() == GL_PICK_BY_VERTEX)
         {
         float* vertex = (*hovered_descriptor)->get_vertex_ref(sub_entity_id);
